@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JSONformat.tools — Free Online JSON Formatter & Validator</title>
+  <meta name="description" content="Free online JSON formatter, validator, and minifier. Instantly format messy JSON, validate syntax, and minify for production. No signup required." />
+  <meta name="keywords" content="json formatter, json validator, json beautifier, json minifier, online json tool, format json online" />
+  <meta property="og:title" content="JSONformat.tools — Free JSON Formatter" />
+  <meta property="og:description" content="Instantly format, validate and minify JSON online. Free, fast, no signup." />
+  <meta property="og:type" content="website" />
+  <link rel="canonical" href="https://jsonformat.tools/" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Google AdSense — replace ca-pub-XXXXXXXXXXXXXXXX with your publisher ID -->
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ░░ HEADER ░░ -->
+  <header class="site-header">
+    <div class="container">
+      <div class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="16 18 22 12 16 6"></polyline>
+            <polyline points="8 6 2 12 8 18"></polyline>
+          </svg>
+        </div>
+        <span class="logo-text">JSON<span class="accent">format</span>.tools</span>
+      </div>
+      <nav class="nav-links">
+        <a href="index.html" class="nav-link active">Formatter</a>
+        <a href="minifier.html" class="nav-link">Minifier</a>
+        <a href="validator.html" class="nav-link">Validator</a>
+        <a href="converter.html" class="nav-link">CSV → JSON</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ░░ TOP AD BANNER ░░ -->
+  <div class="ad-strip container">
+    <!-- Replace this div with your AdSense leaderboard (728x90) unit -->
+    <div class="ad-placeholder leaderboard">
+      <span class="ad-label">Advertisement</span>
+      <span class="ad-note">728×90 Leaderboard Ad · Google AdSense</span>
+    </div>
+  </div>
+
+  <!-- ░░ HERO ░░ -->
+  <section class="hero container">
+    <h1 class="hero-title">JSON Formatter <span class="accent">&</span> Validator</h1>
+    <p class="hero-sub">Paste messy JSON, get clean results instantly. Free, no signup, works offline.</p>
+  </section>
+
+  <!-- ░░ MAIN TOOL ░░ -->
+  <main class="tool-section container">
+
+    <!-- Toolbar -->
+    <div class="toolbar">
+      <div class="toolbar-left">
+        <button class="btn primary" onclick="formatJSON()" title="Format & beautify JSON">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 6h16M4 12h10M4 18h14"/></svg>
+          Format
+        </button>
+        <button class="btn" onclick="minifyJSON()" title="Minify JSON">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
+          Minify
+        </button>
+        <button class="btn" onclick="sortKeys()" title="Sort keys alphabetically">Sort Keys</button>
+        <button class="btn" onclick="copyOutput()" title="Copy output to clipboard">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+          Copy
+        </button>
+        <button class="btn danger" onclick="clearAll()">Clear</button>
+      </div>
+      <div class="toolbar-right">
+        <label class="select-label">Indent</label>
+        <select id="indentSelect" class="select" onchange="formatJSON()">
+          <option value="2">2 spaces</option>
+          <option value="4">4 spaces</option>
+          <option value="tab">Tab</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Editor grid -->
+    <div class="editors">
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-label">Input</span>
+          <span class="status-badge" id="inputStatus">empty</span>
+        </div>
+        <textarea
+          id="inputArea"
+          class="code-area"
+          placeholder='Paste your JSON here...&#10;&#10;Example:&#10;{"name":"Alice","age":30,"skills":["JS","Python"]}'
+          oninput="onInput()"
+          spellcheck="false"
+        ></textarea>
+        <div class="panel-footer">
+          <button class="ghost-btn" onclick="loadSample()">Load sample</button>
+          <span class="char-count" id="inputCharCount">0 chars</span>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-label">Output</span>
+          <span class="status-badge empty" id="outputStatus">—</span>
+        </div>
+        <div class="code-area output-area" id="outputBox" aria-live="polite">Formatted JSON will appear here...</div>
+        <div class="panel-footer">
+          <button class="ghost-btn" onclick="downloadOutput()">Download .json</button>
+          <span class="char-count" id="outputCharCount"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats row -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-label">Characters</div>
+        <div class="stat-value" id="statChars">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Lines</div>
+        <div class="stat-value" id="statLines">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Keys</div>
+        <div class="stat-value" id="statKeys">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Depth</div>
+        <div class="stat-value" id="statDepth">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Size</div>
+        <div class="stat-value" id="statSize">—</div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ░░ MID-PAGE AD ░░ -->
+  <div class="ad-mid container">
+    <!-- Replace with AdSense in-article or rectangle (336x280) unit -->
+    <div class="ad-placeholder rectangle">
+      <span class="ad-label">Advertisement</span>
+      <span class="ad-note">336×280 Rectangle Ad · Google AdSense</span>
+    </div>
+  </div>
+
+  <!-- ░░ HOW TO USE ░░ -->
+  <section class="info-section container">
+    <div class="info-grid">
+      <article class="info-card">
+        <h2>How to format JSON</h2>
+        <ol class="steps">
+          <li>Paste your raw JSON into the <strong>Input</strong> box on the left.</li>
+          <li>Click <strong>Format</strong> — or it auto-formats as you type.</li>
+          <li>Copy the clean output or download it as a <code>.json</code> file.</li>
+        </ol>
+      </article>
+      <article class="info-card">
+        <h2>What is JSON?</h2>
+        <p>JSON (JavaScript Object Notation) is a lightweight data format used to transmit data between a server and a web application. It's human-readable and language-independent, making it the most popular data exchange format on the web.</p>
+      </article>
+      <article class="info-card">
+        <h2>Common JSON errors</h2>
+        <ul class="error-list">
+          <li><code>Unexpected token</code> — missing comma or colon</li>
+          <li><code>Unterminated string</code> — missing closing quote</li>
+          <li><code>Unexpected end</code> — missing closing bracket</li>
+          <li><code>Duplicate key</code> — same key used twice</li>
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <!-- ░░ OTHER TOOLS ░░ -->
+  <section class="tools-section container">
+    <h2 class="section-title">More free tools</h2>
+    <div class="tools-grid">
+      <a href="minifier.html" class="tool-card">
+        <div class="tool-icon">{ }</div>
+        <div class="tool-name">JSON Minifier</div>
+        <div class="tool-desc">Strip whitespace for production</div>
+      </a>
+      <a href="validator.html" class="tool-card">
+        <div class="tool-icon">✓</div>
+        <div class="tool-name">JSON Validator</div>
+        <div class="tool-desc">Check syntax & highlight errors</div>
+      </a>
+      <a href="converter.html" class="tool-card">
+        <div class="tool-icon">⇄</div>
+        <div class="tool-name">CSV → JSON</div>
+        <div class="tool-desc">Convert spreadsheet data</div>
+      </a>
+      <a href="diff.html" class="tool-card">
+        <div class="tool-icon">±</div>
+        <div class="tool-name">JSON Diff</div>
+        <div class="tool-desc">Compare two JSON objects</div>
+      </a>
+    </div>
+  </section>
+
+  <!-- ░░ BOTTOM AD ░░ -->
+  <div class="ad-bottom container">
+    <!-- Replace with AdSense leaderboard (728x90) unit -->
+    <div class="ad-placeholder leaderboard">
+      <span class="ad-label">Advertisement</span>
+      <span class="ad-note">728×90 Leaderboard Ad · Google AdSense</span>
+    </div>
+  </div>
+
+  <!-- ░░ FOOTER ░░ -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <span class="footer-logo">JSON<span class="accent">format</span>.tools</span>
+      <span class="footer-copy">Free forever · No signup · No data stored</span>
+      <div class="footer-links">
+        <a href="privacy.html">Privacy</a>
+        <a href="about.html">About</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ░░ TOAST ░░ -->
+  <div class="toast" id="toast"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
