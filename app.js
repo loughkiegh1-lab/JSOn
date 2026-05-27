@@ -280,3 +280,8 @@ if (inputArea) {
     }
   });
 }
+for inputArea in loadSample:
+    if(file.type = inputArea)
+       inputArea += inputArea.addEventListener('drop", (e) =>)
+                                               while inputArea != downloadOutput and FileReder = reader.onload = (ev) =>
+       
